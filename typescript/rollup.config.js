@@ -1,13 +1,9 @@
-// rollup.config.js
 import {
   terser
 } from 'rollup-plugin-terser'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import sucrase from '@rollup/plugin-sucrase'
-import babel, {
-  getBabelOutputPlugin
-} from '@rollup/plugin-babel'
+import babel from '@rollup/plugin-babel'
 import typescript from '@rollup/plugin-typescript'
 import pkg from './package.json'
 
@@ -41,14 +37,9 @@ export default [{
         }
       }),
       typescript({
-        tsconfig: './tsconfig.json'
-      }),
-      babel({
-        configFile: false,
-        presets: [
-          ['@babel/preset-env'],
-          ['@babel/preset-typescript']
-        ]
+        declaration: true,
+        declarationDir: 'dist',
+        rootDir: 'src'
       }),
       terser()
     ],
@@ -71,24 +62,12 @@ export default [{
       dir: 'dist/',
       entryFileNames: 'plugin.umd.js',
       format: 'umd',
-      plugins: [
-        getBabelOutputPlugin({
-          presets: [
-            ['@babel/preset-env', {
-              modules: 'umd'
-            }]
-          ],
-          allowAllFormats: true
-        }),
-        terser()
-      ],
       globals: {}
     }],
     plugins: [
-      sucrase({
-        exclude: ['node_modules'],
-        transforms: ['typescript']
-      }),
+      typescript(),
+      babel(),
+      terser(),
       resolve({
         // pass custom options to the resolve plugin
         customResolveOptions: {
