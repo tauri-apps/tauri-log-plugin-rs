@@ -1,5 +1,5 @@
 {
-  "gitSiteUrl": "https://www.github.com/tauri-apps/tauri-log-plugin/",
+  "gitSiteUrl": "https://www.github.com/tauri-apps/tauri-log-plugin-rs/",
   "pkgManagers": {
     "rust": {
       "version": true,
