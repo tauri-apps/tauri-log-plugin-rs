@@ -54,7 +54,7 @@ fn get_max_file_size() -> u128 {
 
 fn get_log_file_path<P: AsRef<Path>>(
   dir: P,
-  rotation_strategy: RotationStrategy,
+  rotation_strategy: &RotationStrategy,
 ) -> Result<PathBuf> {
   let path = dir.as_ref().join("app.log");
   if path.exists() {
@@ -81,10 +81,42 @@ fn get_log_file_path<P: AsRef<Path>>(
 }
 
 /// The logger.
-pub struct Logger;
+pub struct LoggerBuilder {
+  rotation_strategy: RotationStrategy,
+  path: PathBuf,
+}
+
+impl LoggerBuilder {
+  pub fn new<P: Into<PathBuf>>(path: P) -> Result<Self> {
+    let builder = Self {
+      path: path.into(),
+      rotation_strategy: RotationStrategy::KeepOne,
+    };
+    Ok(builder)
+  }
+
+  pub fn rotation_strategy(mut self, rotation_strategy: RotationStrategy) -> Self {
+    self.rotation_strategy = rotation_strategy;
+    self
+  }
+
+  pub fn build(self) -> Result<Logger> {
+    let logger = Logger {
+      path: self.path,
+      rotation_strategy: self.rotation_strategy,
+    };
+    logger.init()?;
+    Ok(logger)
+  }
+}
+
+pub struct Logger {
+  rotation_strategy: RotationStrategy,
+  path: PathBuf,
+}
 
 impl Logger {
-  pub fn new<P: AsRef<Path>>(path: P, rotation_strategy: RotationStrategy) -> Result<Self> {
+  fn init(&self) -> Result<()> {
     fern::Dispatch::new()
       // Perform allocation-free log formatting
       .format(|out, message, record| {
@@ -98,10 +130,12 @@ impl Logger {
       })
       .level(log::LevelFilter::Trace)
       .chain(std::io::stdout())
-      .chain(fern::log_file(get_log_file_path(path, rotation_strategy)?)?)
+      .chain(fern::log_file(get_log_file_path(
+        &self.path,
+        &self.rotation_strategy,
+      )?)?)
       .apply()?;
-    let logger = Self {};
-    Ok(logger)
+    Ok(())
   }
 
   pub fn log(&self, level: LogLevel, message: String) {

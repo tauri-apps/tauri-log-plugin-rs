@@ -2,26 +2,23 @@
 
 <body>
   <select id="level">
-    <option value="1">Trace</option>
-    <option value="2">Debug</option>
-    <option value="3" selected="selected">Info</option>
-    <option value="4">Warn</option>
-    <option value="5">Error</option>
+    <option value="trace">Trace</option>
+    <option value="debug">Debug</option>
+    <option value="info" selected="selected">Info</option>
+    <option value="warn">Warn</option>
+    <option value="error">Error</option>
   </select>
   <input id="message">
   <button id="send">Send</button>
 
+  <script src="plugin.umd.js"></script>
   <script>
     var messageInput = document.getElementById('message')
     var levelSelect = document.getElementById('level')
     document.getElementById('send').addEventListener('click', function () {
       var message = messageInput.value
       var level = levelSelect.value
-      window.__TAURI__.invoke({
-        cmd: 'tauriPluginLog',
-        level: Number(level),
-        message: message
-      })
+      window.__TAURI_PLUGIN_LOG__[level](message)
     })
   </script>
 </body>

@@ -1,1 +1,5 @@
-{}
+{
+  "scripts": {
+    "build": "cd ../../typescript && yarn build && cp dist/plugin.umd.js ../examples/vanilla/dist"
+  }
+}

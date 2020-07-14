@@ -12,9 +12,9 @@ build = "src/build.rs"
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = [ "derive" ] }
-tauri = { path = "../../../tauri/tauri", features = [ "all-api", "edge" ] }
+tauri = { path = "../../../../tauri/tauri", features = [ "all-api", "edge" ] }
 anyhow = "1.0"
-tauri-log-plugin = { path = "../.." }
+tauri-log-plugin = { path = "../../.." }
 
 [target."cfg(windows)".build-dependencies]
 winres = "0.1"
