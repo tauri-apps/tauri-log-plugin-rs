@@ -87,12 +87,12 @@ pub struct LoggerBuilder {
 }
 
 impl LoggerBuilder {
-  pub fn new<P: Into<PathBuf>>(path: P) -> Result<Self> {
+  pub fn new<P: Into<PathBuf>>(path: P) -> Self {
     let builder = Self {
       path: path.into(),
       rotation_strategy: RotationStrategy::KeepOne,
     };
-    Ok(builder)
+    builder
   }
 
   pub fn rotation_strategy(mut self, rotation_strategy: RotationStrategy) -> Self {

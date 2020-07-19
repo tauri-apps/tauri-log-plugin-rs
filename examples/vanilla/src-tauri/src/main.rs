@@ -8,7 +8,7 @@ use tauri::api::{
   config::get as get_config,
   path::{resolve_path, BaseDirectory},
 };
-use tauri_log_plugin::{Logger, RotationStrategy};
+use tauri_log_plugin::{LoggerBuilder, RotationStrategy};
 
 fn main() -> anyhow::Result<()> {
   let config = get_config()?;
@@ -21,7 +21,9 @@ fn main() -> anyhow::Result<()> {
     std::fs::create_dir_all(&log_dir)?;
   }
 
-  let logger = Logger::new(log_dir, RotationStrategy::KeepAll)?;
+  let logger = LoggerBuilder::new(log_dir)
+    .rotation_strategy(RotationStrategy::KeepAll)
+    .build()?;
 
   tauri::AppBuilder::new()
     .plugin(logger)
