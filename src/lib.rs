@@ -3,7 +3,7 @@ use byte_unit::Byte;
 use log::{debug, error, info, trace, warn};
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
-use tauri::api::config::get as get_config;
+use tauri::{api::config::get as get_config, plugin::Plugin};
 
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
@@ -149,8 +149,8 @@ impl Logger {
   }
 }
 
-impl tauri::plugin::Plugin for Logger {
-  fn extend_api(&self, _: &mut tauri::WebView<'_, ()>, payload: &str) -> Result<bool, String> {
+impl Plugin for Logger {
+  fn extend_api(&self, _: &mut tauri::Webview, payload: &str) -> Result<bool, String> {
     match serde_json::from_str(payload) {
       Err(e) => Err(e.to_string()),
       Ok(command) => {

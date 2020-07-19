@@ -1,2 +1,3 @@
 dist/index.tauri.html
 dist/plugin.umd.js
+node_modules/
