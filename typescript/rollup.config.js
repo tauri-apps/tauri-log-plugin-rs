@@ -36,11 +36,7 @@ export default [{
           moduleDirectory: 'node_modules'
         }
       }),
-      typescript({
-        declaration: true,
-        declarationDir: 'dist',
-        rootDir: 'src'
-      }),
+      typescript(),
       terser()
     ],
     external: [

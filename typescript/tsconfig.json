@@ -6,7 +6,10 @@
     "baseUrl": ".",
     "paths": {
       "types": ["@types"]
-    }
+    },
+    "declaration": true,
+    "declarationDir": "dist",
+    "rootDir": "src"
   },
   "include": ["./src"]
 }
